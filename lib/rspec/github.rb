@@ -1,8 +1,9 @@
-require "rspec/github/version"
+# frozen_string_literal: true
+
+require 'rspec/github/version'
+require 'rspec/github/formatter'
 
 module Rspec
   module Github
-    class Error < StandardError; end
-    # Your code goes here...
   end
 end

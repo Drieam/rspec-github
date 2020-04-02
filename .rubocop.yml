@@ -1,0 +1,15 @@
+AllCops:
+  TargetRubyVersion: 2.7
+
+# A top class comment is not needed for this simple gem
+Style/Documentation:
+  Enabled: false
+
+# 80 chars is really short. Screens got bigger you know.
+Layout/LineLength:
+  Max: 120
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*.rb' # Specs just have large blocks
+    - '*.gemspec'    # Is just one block

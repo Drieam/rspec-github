@@ -1,40 +1,40 @@
 # Rspec::Github
+[RSpec](https://rspec.info/) formatter compatible with [GitHub Action](https://github.com/features/actions)'s annotations. It supports multiline errors and will set pending specs as warnings:
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/rspec/github`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+![screenshot.png](docs/screenshot.png)
 
 ## Installation
-
-Add this line to your application's Gemfile:
-
+Add the gem to your application's `Gemfile` `test` group:
 ```ruby
-gem 'rspec-github'
+group :test do
+  gem 'rspec-github', require: false
+end
 ```
 
-And then execute:
-
-    $ bundle install
-
-Or install it yourself as:
-
-    $ gem install rspec-github
+And then of course install the gem by executing:
+```shell script
+bundle install
+```
 
 ## Usage
+You can specify the formatter with a command line argument:
+```shell script
+rspec --format RSpec::Github::Formatter
+```
 
-TODO: Write usage instructions here
+And to always run it with this formatter, you can set it in the `.rspec` file:
+```
+# other configuration
+--format RSpec::Github::Formatter
+```
 
 ## Development
+After checking out the repo, run `bundle install` to install dependencies. Then, run `rake spec` to run the tests. 
+Publishing a new version is handled by the [publish workflow](.github/workflows/publish.yml). This workflow publishes a GitHub release to [rubygems](https://rubygems.org/) with the version defined in the release. 
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/rspec-github.
-
+### Usefull references
+- https://help.github.com/en/actions/reference/development-tools-for-github-actions
+- https://developer.github.com/apps/quickstart-guides/creating-ci-tests-with-the-checks-api
 
 ## License
-
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
