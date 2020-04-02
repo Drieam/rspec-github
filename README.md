@@ -5,6 +5,7 @@
 
 ## Installation
 Add the gem to your application's `Gemfile` `test` group:
+
 ```ruby
 group :test do
   gem 'rspec-github', require: false
@@ -12,17 +13,20 @@ end
 ```
 
 And then of course install the gem by executing:
-```shell script
+
+```bash
 bundle install
 ```
 
 ## Usage
 You can specify the formatter with a command line argument:
-```shell script
+
+```bash
 rspec --format RSpec::Github::Formatter
 ```
 
 And to always run it with this formatter, you can set it in the `.rspec` file:
+
 ```
 # other configuration
 --format RSpec::Github::Formatter
