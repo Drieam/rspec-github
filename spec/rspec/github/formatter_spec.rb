@@ -40,12 +40,8 @@ RSpec.describe RSpec::Github::Formatter do
       )
     end
 
-    it 'still includes the documentation format' do
-      is_expected.to include "#{example.description} (FAILED"
-    end
-
-    it 'includes the GitHub annotation formatted error' do
-      is_expected.to include <<~MESSAGE
+    it 'outputs the GitHub annotation formatted error' do
+      is_expected.to eq <<~MESSAGE
         ::error file=./spec/models/user_spec.rb,line=12::#{notification.message_lines.join('%0A')}
       MESSAGE
     end
@@ -61,12 +57,8 @@ RSpec.describe RSpec::Github::Formatter do
       )
     end
 
-    it 'still includes the documentation format' do
-      is_expected.to include "#{example.description} (PENDING: Not yet implemented)"
-    end
-
-    it 'includes the GitHub annotation formatted error' do
-      is_expected.to include <<~MESSAGE
+    it 'outputs the GitHub annotation formatted error' do
+      is_expected.to eq <<~MESSAGE
         ::warning file=./spec/models/user_spec.rb,line=12::#{example.full_description}
       MESSAGE
     end

@@ -3,7 +3,7 @@
 require 'rspec/github/version'
 require 'rspec/github/formatter'
 
-module Rspec
+module RSpec
   module Github
   end
 end

@@ -4,7 +4,7 @@ require_relative 'lib/rspec/github/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'rspec-github'
-  spec.version       = Rspec::Github::VERSION
+  spec.version       = RSpec::Github::VERSION
   spec.authors       = ['Stef Schenkelaars']
   spec.email         = ['stef.schenkelaars@gmail.com']
 
@@ -21,6 +21,6 @@ Gem::Specification.new do |spec|
   # Specify which files should be added to the gem when it is released.
   spec.files = Dir['{lib}/**/*']
 
-  spec.add_development_dependency 'rspec', '~> 3.0'
+  spec.add_runtime_dependency 'rspec-core', '~> 3.0'
   spec.add_development_dependency 'rubocop', '~> 0.81.0'
 end

@@ -32,6 +32,12 @@ And to always run it with this formatter, you can set it in the `.rspec` file:
 --format RSpec::Github::Formatter
 ```
 
+Note that you can select multiple formatters so that you can also see other output:
+```bash
+rspec --format RSpec::Github::Formatter --format progress
+rspec --format RSpec::Github::Formatter --format documentation
+```
+
 ## Development
 After checking out the repo, run `bundle install` to install dependencies. Then, run `rake spec` to run the tests. 
 Publishing a new version is handled by the [publish workflow](.github/workflows/publish.yml). This workflow publishes a GitHub release to [rubygems](https://rubygems.org/) with the version defined in the release. 

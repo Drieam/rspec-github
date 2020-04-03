@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Rspec
+module RSpec
   module Github
     VERSION = '1.0.0.develop'
   end
