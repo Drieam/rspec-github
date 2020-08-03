@@ -42,6 +42,7 @@ RSpec.describe RSpec::Github::Formatter do
 
     it 'outputs the GitHub annotation formatted error' do
       is_expected.to eq <<~MESSAGE
+
         ::error file=./spec/models/user_spec.rb,line=12::#{notification.message_lines.join('%0A')}
       MESSAGE
     end
@@ -59,6 +60,7 @@ RSpec.describe RSpec::Github::Formatter do
 
     it 'outputs the GitHub annotation formatted error' do
       is_expected.to eq <<~MESSAGE
+
         ::warning file=./spec/models/user_spec.rb,line=12::#{example.full_description}
       MESSAGE
     end

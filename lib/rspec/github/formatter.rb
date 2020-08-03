@@ -10,12 +10,12 @@ module RSpec
 
       def example_failed(failure)
         file, line = failure.example.location.split(':')
-        output.puts "::error file=#{file},line=#{line}::#{failure.message_lines.join('%0A')}"
+        output.puts "\n::error file=#{file},line=#{line}::#{failure.message_lines.join('%0A')}"
       end
 
       def example_pending(pending)
         file, line = pending.example.location.split(':')
-        output.puts "::warning file=#{file},line=#{line}::#{pending.example.full_description}"
+        output.puts "\n::warning file=#{file},line=#{line}::#{pending.example.full_description}"
       end
     end
   end
