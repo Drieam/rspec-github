@@ -14,8 +14,14 @@ module RSpec
       end
 
       def example_pending(pending)
+        return if pending_disabled?
+
         file, line = pending.example.location.split(':')
         output.puts "\n::warning file=#{file},line=#{line}::#{pending.example.full_description}"
+      end
+
+      def pending_disabled?
+        !ENV['RSPEC_GITHUB_DISABLE_PENDING'].nil?
       end
     end
   end

@@ -49,7 +49,12 @@ RSpec.describe RSpec::Github::Formatter do
   end
 
   describe '#example_pending' do
-    before { formatter.example_pending(notification) }
+    before do
+      allow(ENV).to receive(:[]).with('RSPEC_GITHUB_DISABLE_PENDING').and_return(pending_env_var)
+      formatter.example_pending(notification)
+    end
+
+    let(:pending_env_var) { nil }
 
     let(:notification) do
       double(
@@ -63,6 +68,14 @@ RSpec.describe RSpec::Github::Formatter do
 
         ::warning file=./spec/models/user_spec.rb,line=12::#{example.full_description}
       MESSAGE
+    end
+
+    context 'when pending specs are disabled' do
+      let(:pending_env_var) { 'yep' }
+
+      it 'skips output' do
+        is_expected.to eq('')
+      end
     end
   end
 end
