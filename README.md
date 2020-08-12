@@ -38,9 +38,14 @@ rspec --format RSpec::Github::Formatter --format progress
 rspec --format RSpec::Github::Formatter --format documentation
 ```
 
+If you want to disable annotations for pending specs you can do that using `RSPEC_GITHUB_DISABLE_PENDING` env var:
+```bash
+RSPEC_GITHUB_DISABLE_PENDING=yes rspec --format RSpec::Github::Formatter
+```
+
 ## Development
-After checking out the repo, run `bundle install` to install dependencies. Then, run `rake spec` to run the tests. 
-Publishing a new version is handled by the [publish workflow](.github/workflows/publish.yml). This workflow publishes a GitHub release to [rubygems](https://rubygems.org/) with the version defined in the release. 
+After checking out the repo, run `bundle install` to install dependencies. Then, run `rake spec` to run the tests.
+Publishing a new version is handled by the [publish workflow](.github/workflows/publish.yml). This workflow publishes a GitHub release to [rubygems](https://rubygems.org/) with the version defined in the release.
 
 ### Usefull references
 - https://help.github.com/en/actions/reference/development-tools-for-github-actions
