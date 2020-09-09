@@ -9,14 +9,8 @@ module RSpec
       RSpec::Core::Formatters.register self, :example_failed, :example_pending
 
       def self.relative_path(path)
-        if (workspace = ENV['GITHUB_WORKSPACE'])
-          workspace = "#{File.realpath(workspace)}#{File::SEPARATOR}"
-          absolute_path = File.realpath(path)
-
-          return absolute_path.delete_prefix(workspace) if absolute_path.start_with?(workspace)
-        end
-
-        path
+        workspace = File.realpath(ENV.fetch('GITHUB_WORKSPACE', '.'))
+        File.realpath(path).delete_prefix("#{workspace}#{File::SEPARATOR}")
       end
 
       def example_failed(failure)
