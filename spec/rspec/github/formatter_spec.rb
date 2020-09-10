@@ -6,11 +6,14 @@ RSpec.describe RSpec::Github::Formatter do
   let(:output) { StringIO.new }
   let(:formatter) { described_class.new(output) }
   subject(:output_string) { output.string }
+  let(:skip) { false }
+
+  let(:pending_message) { 'Not yet implemented' }
 
   let(:execution_result) do
     double(
       'RSpec::Core::Example::ExecutionResult',
-      pending_message: 'Not yet implemented'
+      pending_message: pending_message
     )
   end
 
@@ -20,7 +23,8 @@ RSpec.describe RSpec::Github::Formatter do
       execution_result: execution_result,
       full_description: 'User is expected to validate presence of name',
       description: 'is expected to validate presence of name',
-      location: './spec/models/user_spec.rb:12'
+      location: './spec/models/user_spec.rb:12',
+      skip: skip
     )
   end
 
@@ -98,7 +102,7 @@ RSpec.describe RSpec::Github::Formatter do
     it 'outputs the GitHub annotation formatted error' do
       is_expected.to eq <<~MESSAGE
 
-        ::error file=spec/models/user_spec.rb,line=12::#{notification.message_lines.join('%0A')}
+        ::error file=spec/models/user_spec.rb,line=12::#{example.full_description}%0A%0A#{notification.message_lines.join('%0A')}
       MESSAGE
     end
   end
@@ -113,11 +117,24 @@ RSpec.describe RSpec::Github::Formatter do
       )
     end
 
-    it 'outputs the GitHub annotation formatted error' do
-      is_expected.to eq <<~MESSAGE
+    context 'when pending' do
+      it 'outputs the GitHub annotation formatted warning' do
+        is_expected.to eq <<~MESSAGE
 
-        ::warning file=spec/models/user_spec.rb,line=12::#{example.full_description}
-      MESSAGE
+          ::warning file=spec/models/user_spec.rb,line=12::#{example.full_description}%0A%0APending: #{pending_message}
+        MESSAGE
+      end
+    end
+
+    context 'when skipped' do
+      let(:skip) { true }
+
+      it 'outputs the GitHub annotation formatted warning' do
+        is_expected.to eq <<~MESSAGE
+
+          ::warning file=spec/models/user_spec.rb,line=12::#{example.full_description}%0A%0ASkipped: #{pending_message}
+        MESSAGE
+      end
     end
   end
 end
