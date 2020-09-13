@@ -8,6 +8,8 @@ RSpec.describe RSpec::Github::Formatter do
   subject(:output_string) { output.string }
   let(:skip) { false }
 
+  let(:location) { './spec/models/user_spec.rb:12' }
+
   let(:pending_message) { 'Not yet implemented' }
 
   let(:execution_result) do
@@ -23,7 +25,7 @@ RSpec.describe RSpec::Github::Formatter do
       execution_result: execution_result,
       full_description: 'User is expected to validate presence of name',
       description: 'is expected to validate presence of name',
-      location: './spec/models/user_spec.rb:12',
+      location: location,
       skip: skip
     )
   end
@@ -32,53 +34,6 @@ RSpec.describe RSpec::Github::Formatter do
     allow(File).to receive(:realpath).and_call_original
     allow(File).to receive(:realpath).with('./spec/models/user_spec.rb')
                                      .and_return(File.join(Dir.pwd, 'spec/models/user_spec.rb'))
-  end
-
-  describe '::relative_path' do
-    around do |example|
-      saved_github_workspace = ENV['GITHUB_WORKSPACE']
-      ENV['GITHUB_WORKSPACE'] = github_workspace
-
-      FileUtils.mkpath File.dirname(absolute_path)
-      FileUtils.touch absolute_path
-
-      Dir.chdir tmpdir do
-        example.run
-      end
-    ensure
-      FileUtils.rm_r tmpdir
-      ENV['GITHUB_WORKSPACE'] = saved_github_workspace
-    end
-
-    let(:tmpdir) { Dir.mktmpdir }
-    let(:relative_path) { 'this/is/a/relative_path.rb' }
-    let(:absolute_path) { File.join(tmpdir, relative_path) }
-
-    context 'if GITHUB_WORKSPACE is set' do
-      let(:github_workspace) { tmpdir }
-
-      it 'returns the path relative to it when already inside it' do
-        expect(described_class.relative_path('this/is/a/relative_path.rb')).to eq('this/is/a/relative_path.rb')
-      end
-
-      it 'returns the path relative to it when in a subdirectory of it' do
-        Dir.chdir 'this/is' do
-          expect(described_class.relative_path('a/relative_path.rb')).to eq('this/is/a/relative_path.rb')
-        end
-      end
-    end
-
-    context 'if GITHUB_WORKSPACE is unset' do
-      let(:github_workspace) { nil }
-
-      it 'returns the unchanged relative path' do
-        expect(described_class.relative_path('this/is/a/relative_path.rb')).to eq 'this/is/a/relative_path.rb'
-      end
-
-      it 'returns the relative path without a ./ prefix' do
-        expect(described_class.relative_path('./this/is/a/relative_path.rb')).to eq 'this/is/a/relative_path.rb'
-      end
-    end
   end
 
   describe '#example_failed' do
@@ -104,6 +59,49 @@ RSpec.describe RSpec::Github::Formatter do
 
         ::error file=spec/models/user_spec.rb,line=12::#{example.full_description}%0A%0A#{notification.message_lines.join('%0A')}
       MESSAGE
+    end
+
+    context 'relative_path to GITHUB_WORKSPACE' do
+      around do |example|
+        saved_github_workspace = ENV['GITHUB_WORKSPACE']
+        ENV['GITHUB_WORKSPACE'] = tmpdir
+
+        FileUtils.mkpath File.dirname(absolute_path)
+        FileUtils.touch absolute_path
+
+        Dir.chdir tmpdir do
+          example.run
+        end
+      ensure
+        FileUtils.rm_r tmpdir
+        ENV['GITHUB_WORKSPACE'] = saved_github_workspace
+      end
+
+      let(:tmpdir) { Dir.mktmpdir }
+      let(:relative_path) { 'this/is/a/relative_path.rb' }
+      let(:absolute_path) { File.join(tmpdir, relative_path) }
+
+      context 'inside root dir' do
+        let(:github_workspace) { tmpdir }
+        let(:location) { './this/is/a/relative_path.rb' }
+
+        it 'returns the relative path' do
+          is_expected.to include 'this/is/a/relative_path.rb'
+        end
+      end
+      context 'inside subdirectory dir' do
+        let(:github_workspace) { tmpdir }
+        let(:location) { './a/relative_path.rb' }
+        around do |example|
+          Dir.chdir 'this/is' do
+            example.run
+          end
+        end
+
+        it 'returns the relative path' do
+          is_expected.to include 'this/is/a/relative_path.rb'
+        end
+      end
     end
   end
 
