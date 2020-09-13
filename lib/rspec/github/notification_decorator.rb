@@ -1,16 +1,18 @@
 # frozen_string_literal: true
 
-require 'delegate'
-
 module RSpec
   module Github
-    class ExampleDecorator < SimpleDelegator
+    class NotificationDecorator
       # See https://github.community/t/set-output-truncates-multiline-strings/16852/3.
       ESCAPE_MAP = {
         '%' => '%25',
         "\n" => '%0A',
         "\r" => '%0D'
       }.freeze
+
+      def initialize(notification)
+        @notification = notification
+      end
 
       def line
         example.location.split(':')[1]
@@ -27,9 +29,13 @@ module RSpec
 
       private
 
+      def example
+        @notification.example
+      end
+
       def message
-        if respond_to? :message_lines
-          message_lines.join("\n")
+        if @notification.respond_to?(:message_lines)
+          @notification.message_lines.join("\n")
         else
           "#{example.skip ? 'Skipped' : 'Pending'}: #{example.execution_result.pending_message}"
         end

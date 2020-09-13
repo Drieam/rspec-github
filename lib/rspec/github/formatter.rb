@@ -2,7 +2,7 @@
 
 require 'rspec/core'
 require 'rspec/core/formatters/base_formatter'
-require 'rspec/github/example_decorator'
+require 'rspec/github/notification_decorator'
 
 module RSpec
   module Github
@@ -10,15 +10,15 @@ module RSpec
       RSpec::Core::Formatters.register self, :example_failed, :example_pending
 
       def example_failed(failure)
-        example = ExampleDecorator.new(failure)
+        notification = NotificationDecorator.new(failure)
 
-        output.puts "\n::error file=#{example.path},line=#{example.line}::#{example.annotation}"
+        output.puts "\n::error file=#{notification.path},line=#{notification.line}::#{notification.annotation}"
       end
 
       def example_pending(pending)
-        example = ExampleDecorator.new(pending)
+        notification = NotificationDecorator.new(pending)
 
-        output.puts "\n::warning file=#{example.path},line=#{example.line}::#{example.annotation}"
+        output.puts "\n::warning file=#{notification.path},line=#{notification.line}::#{notification.annotation}"
       end
     end
   end
