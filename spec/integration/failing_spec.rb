@@ -19,4 +19,12 @@ RSpec.describe RSpec::Github::Formatter do
   it 'does not create an annotiation for passing specs' do
     expect(true).to eq true
   end
+
+  describe 'display all annotations' do
+    (1..500).each do |number|
+      it "test #{number}" do
+        expect(true).to eq false
+      end
+    end
+  end
 end
