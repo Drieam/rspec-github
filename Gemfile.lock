@@ -28,7 +28,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.9.0)
     rspec-support (3.9.3)
-    rubocop (0.93.1)
+    rubocop (1.0.0)
       parallel (~> 1.10)
       parser (>= 2.7.1.5)
       rainbow (>= 2.2.2, < 4.0)
@@ -48,7 +48,7 @@ PLATFORMS
 DEPENDENCIES
   rspec (~> 3.0)
   rspec-github!
-  rubocop (~> 0.81)
+  rubocop (~> 1.0)
 
 BUNDLED WITH
    2.1.4

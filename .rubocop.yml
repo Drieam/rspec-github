@@ -1,5 +1,4 @@
 AllCops:
-  NewCops: enable
   TargetRubyVersion: 2.4
 
 # A top class comment is not needed for this simple gem
