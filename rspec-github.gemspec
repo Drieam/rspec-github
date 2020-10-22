@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.description   = 'Formatter for RSpec to show errors in GitHub action annotations'
   spec.homepage      = 'https://drieam.github.io/rspec-github'
   spec.license       = 'MIT'
-  spec.required_ruby_version = Gem::Requirement.new('>= 2.3.0')
+  spec.required_ruby_version = Gem::Requirement.new('>= 2.4.0')
 
   spec.metadata['allowed_push_host'] = 'https://rubygems.org'
   spec.metadata['homepage_uri'] = spec.homepage
@@ -23,5 +23,5 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency 'rspec-core', '~> 3.0'
   spec.add_development_dependency 'rspec', '~> 3.0'
-  spec.add_development_dependency 'rubocop', '~> 0.81.0'
+  spec.add_development_dependency 'rubocop', '~> 0.81'
 end
