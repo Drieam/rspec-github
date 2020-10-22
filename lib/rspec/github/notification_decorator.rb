@@ -24,7 +24,8 @@ module RSpec
       end
 
       def path
-        File.realpath(raw_path).delete_prefix("#{workspace}#{File::SEPARATOR}")
+        # TODO: use `delete_prefix` when dropping ruby 2.4 support
+        File.realpath(raw_path).sub(/\A#{workspace}#{File::SEPARATOR}/, '')
       end
 
       private

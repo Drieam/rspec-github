@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: rubocop
         uses: reviewdog/action-rubocop@v1
         with:
@@ -13,11 +13,19 @@ jobs:
           reporter: github-check
   rspec:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby:
+          - 2.4
+          - 2.5
+          - 2.6
+          - 2.7
+    name: RSpec tests ruby ${{ matrix.ruby }}
     steps:
       - name: Check out code
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: Setup caching for ruby gems
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: vendor/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
@@ -26,7 +34,7 @@ jobs:
       - name: Setup Ruby
         uses: actions/setup-ruby@v1
         with:
-          ruby-version: 2.7
+          ruby-version: ${{ matrix.ruby }}
       - name: Install gems
         run: |
           gem install bundler:2.1.4 --no-doc
@@ -38,9 +46,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: Setup caching for ruby gems
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: vendor/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
