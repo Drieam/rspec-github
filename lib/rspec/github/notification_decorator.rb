@@ -15,7 +15,7 @@ module RSpec
       end
 
       def line
-        example.location.split(':')[1]
+        example.location.split(':')[1].to_i
       end
 
       def annotation
@@ -26,6 +26,21 @@ module RSpec
       def path
         # TODO: use `delete_prefix` when dropping ruby 2.4 support
         File.realpath(raw_path).sub(/\A#{workspace}#{File::SEPARATOR}/, '')
+      end
+
+      def to_h
+        {
+          path: path,
+          start_line: line,
+          end_line: line,
+          annotation_level: 'warning',
+          title: example.full_description,
+          message: message
+        }
+      end
+
+      def to_json(*args)
+        to_h.to_json
       end
 
       private

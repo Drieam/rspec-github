@@ -21,7 +21,7 @@ RSpec.describe RSpec::Github::Formatter do
   end
 
   describe 'display all annotations' do
-    (1..500).each do |number|
+    (1..125).each do |number|
       it "test #{number}" do
         expect(true).to eq false
       end

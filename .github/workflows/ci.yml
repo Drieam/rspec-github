@@ -11,6 +11,7 @@ jobs:
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-check
+
   rspec:
     runs-on: ubuntu-latest
     strategy:
@@ -41,8 +42,9 @@ jobs:
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
       - name: Run RSpec
-        run: bundle exec rspec spec/rspec
-  e2e:
+        run: bundle exec rspec spec/rspec --format RSpec::Github::Formatter
+
+  e2e-formatter:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -64,8 +66,34 @@ jobs:
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
       - name: Run RSpec in GITHUB_WORKSPACE
-        run: '! bundle exec rspec spec/integration/failing_spec.rb'
+        run: '! bundle exec rspec spec/integration/failing_spec.rb --format RSpec::Github::Formatter'
       - name: Run RSpec in sub-directory of GITHUB_WORKSPACE
         run: |
           cd spec/integration
           bundle exec rspec relative_path/pending_spec.rb --require ../spec_helper --format RSpec::Github::Formatter
+
+  e2e-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Setup caching for ruby gems
+        uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+      - name: Setup Ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: 2.7
+      - name: Install gems
+        run: |
+          gem install bundler:2.1.4 --no-doc
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+      - name: Run RSpec with Annotator
+        env:
+          OCTOKIT_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: '! bundle exec rspec spec/integration/failing_spec.rb --format RSpec::Github::Annotator'

@@ -2,16 +2,27 @@ PATH
   remote: .
   specs:
     rspec-github (1.0.0.develop)
+      octokit (~> 4.0)
       rspec-core (~> 3.0)
 
 GEM
   remote: https://rubygems.org/
   specs:
+    addressable (2.7.0)
+      public_suffix (>= 2.0.2, < 5.0)
     ast (2.4.1)
     diff-lcs (1.4.4)
+    faraday (1.1.0)
+      multipart-post (>= 1.2, < 3)
+      ruby2_keywords
+    multipart-post (2.1.1)
+    octokit (4.19.0)
+      faraday (>= 0.9)
+      sawyer (~> 0.8.0, >= 0.5.3)
     parallel (1.19.2)
     parser (2.7.2.0)
       ast (~> 2.4.1)
+    public_suffix (4.0.6)
     rainbow (3.0.0)
     regexp_parser (1.8.2)
     rexml (3.2.4)
@@ -37,9 +48,13 @@ GEM
       rubocop-ast (>= 0.6.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 2.0)
-    rubocop-ast (1.0.0)
+    rubocop-ast (1.0.1)
       parser (>= 2.7.1.5)
     ruby-progressbar (1.10.1)
+    ruby2_keywords (0.0.2)
+    sawyer (0.8.2)
+      addressable (>= 2.3.5)
+      faraday (> 0.8, < 2.0)
     unicode-display_width (1.7.0)
 
 PLATFORMS
