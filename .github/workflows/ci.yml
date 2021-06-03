@@ -6,9 +6,14 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.0
+          bundler-cache: true
       - name: rubocop
         uses: reviewdog/action-rubocop@v1
         with:
+          rubocop_version: gemfile
           github_token: ${{ secrets.github_token }}
           reporter: github-check
   rspec:
@@ -20,26 +25,15 @@ jobs:
           - 2.5
           - 2.6
           - 2.7
+          - 3.0
     name: RSpec tests ruby ${{ matrix.ruby }}
     steps:
       - name: Check out code
         uses: actions/checkout@v2
-      - name: Setup caching for ruby gems
-        uses: actions/cache@v2
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
-      - name: Setup Ruby
-        uses: actions/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-      - name: Install gems
-        run: |
-          gem install bundler:2.1.4 --no-doc
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
+          bundler-cache: true
       - name: Run RSpec
         run: bundle exec rspec spec/rspec
   e2e:
@@ -47,22 +41,10 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
-      - name: Setup caching for ruby gems
-        uses: actions/cache@v2
+      - uses: ruby/setup-ruby@v1
         with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
-      - name: Setup Ruby
-        uses: actions/setup-ruby@v1
-        with:
-          ruby-version: 2.7
-      - name: Install gems
-        run: |
-          gem install bundler:2.1.4 --no-doc
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
+          ruby-version: 3.0
+          bundler-cache: true
       - name: Run RSpec in GITHUB_WORKSPACE
         run: '! bundle exec rspec spec/integration/failing_spec.rb'
       - name: Run RSpec in sub-directory of GITHUB_WORKSPACE
