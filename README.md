@@ -1,4 +1,7 @@
 # Rspec::Github
+[![CI](https://github.com/Drieam/rspec-github/actions/workflows/ci.yml/badge.svg)](https://github.com/Drieam/rspec-github/actions/workflows/ci.yml)
+[![Gem Version](https://badge.fury.io/rb/rspec-github.svg)](https://badge.fury.io/rb/rspec-github)
+
 [RSpec](https://rspec.info/) formatter compatible with [GitHub Action](https://github.com/features/actions)'s annotations. It supports multiline errors and will set pending specs as warnings:
 
 ![screenshot.png](docs/screenshot.png)
