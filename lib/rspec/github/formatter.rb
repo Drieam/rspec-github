@@ -7,7 +7,7 @@ require 'rspec/github/notification_decorator'
 module RSpec
   module Github
     class Formatter < RSpec::Core::Formatters::BaseFormatter
-      RSpec::Core::Formatters.register self, :example_failed, :example_pending
+      RSpec::Core::Formatters.register self, :example_failed, :example_pending, :seed
 
       def example_failed(failure)
         notification = NotificationDecorator.new(failure)
@@ -19,6 +19,12 @@ module RSpec
         notification = NotificationDecorator.new(pending)
 
         output.puts "\n::warning file=#{notification.path},line=#{notification.line}::#{notification.annotation}"
+      end
+
+      def seed(notification)
+        return unless notification.seed_used?
+
+        output.puts notification.fully_formatted
       end
     end
   end
