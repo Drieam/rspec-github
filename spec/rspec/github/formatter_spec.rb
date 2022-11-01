@@ -64,7 +64,7 @@ RSpec.describe RSpec::Github::Formatter do
     context 'relative_path to GITHUB_WORKSPACE' do
       around do |example|
         begin
-          saved_github_workspace = ENV['GITHUB_WORKSPACE']
+          saved_github_workspace = ENV.fetch('GITHUB_WORKSPACE', nil)
           ENV['GITHUB_WORKSPACE'] = tmpdir
 
           FileUtils.mkpath File.dirname(absolute_path)

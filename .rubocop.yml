@@ -14,3 +14,7 @@ Metrics/BlockLength:
   Exclude:
     - 'spec/**/*.rb' # Specs just have large blocks
     - '*.gemspec'    # Is just one block
+
+# The publish workflow uses an auth token
+Gemspec/RequireMFA:
+  Enabled: false
