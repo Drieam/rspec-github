@@ -137,4 +137,26 @@ RSpec.describe RSpec::Github::Formatter do
       end
     end
   end
+
+  describe '#seed' do
+    before { formatter.seed(notification) }
+
+    context 'when seed used' do
+      let(:notification) do
+        RSpec::Core::Notifications::SeedNotification.new(4242, true)
+      end
+
+      it 'outputs the fully formatted seed notification' do
+        is_expected.to eq "\nRandomized with seed 4242\n"
+      end
+    end
+
+    context 'when seed not used' do
+      let(:notification) do
+        RSpec::Core::Notifications::SeedNotification.new(nil, false)
+      end
+
+      it { is_expected.to be_empty }
+    end
+  end
 end
