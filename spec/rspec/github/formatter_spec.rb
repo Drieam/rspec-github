@@ -63,7 +63,6 @@ RSpec.describe RSpec::Github::Formatter do
 
     context 'relative_path to GITHUB_WORKSPACE' do
       around do |example|
-        begin
           saved_github_workspace = ENV['GITHUB_WORKSPACE']
           ENV['GITHUB_WORKSPACE'] = tmpdir
 
@@ -73,10 +72,9 @@ RSpec.describe RSpec::Github::Formatter do
           Dir.chdir tmpdir do
             example.run
           end
-        ensure
-          FileUtils.rm_r tmpdir
-          ENV['GITHUB_WORKSPACE'] = saved_github_workspace
-        end
+      ensure
+        FileUtils.rm_r tmpdir
+        ENV['GITHUB_WORKSPACE'] = saved_github_workspace
       end
 
       let(:tmpdir) { Dir.mktmpdir }
