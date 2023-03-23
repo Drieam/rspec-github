@@ -23,6 +23,6 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency 'rspec-core', '~> 3.0'
   spec.add_development_dependency 'rspec', '~> 3.0'
-  spec.add_development_dependency 'rubocop', '~> 1.12.0'
+  spec.add_development_dependency 'rubocop', '~> 1.13.0'
   spec.add_development_dependency 'rubocop-ast', '~> 1.4.0'
 end
