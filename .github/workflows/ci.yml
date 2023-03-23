@@ -1,5 +1,9 @@
 name: CI
-on: [pull_request, push]
+on:
+  push:
+    branches-ignore:
+      - 'dependabot/**'
+  pull_request:
 jobs:
   reviewdog:
     runs-on: ubuntu-latest
@@ -11,7 +15,7 @@ jobs:
           ruby-version: 3.0
           bundler-cache: true
       - name: rubocop
-        uses: reviewdog/action-rubocop@v1
+        uses: reviewdog/action-rubocop@v2
         with:
           rubocop_version: gemfile
           github_token: ${{ secrets.github_token }}
