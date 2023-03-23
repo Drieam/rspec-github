@@ -35,6 +35,18 @@ And to always run it with this formatter, you can set it in the `.rspec` file:
 --format RSpec::Github::Formatter
 ```
 
+And to register the formatter in configuration, you can add the following to `spec/spec_helper.rb`:
+
+```ruby
+RSpec.configure do |config|
+  # Use the GitHub Annotations formatter for CI
+  if ENV['GITHUB_ACTIONS'] == 'true'
+    require 'rspec/github'
+    config.add_formatter RSpec::Github::Formatter
+  end
+end
+```
+
 Note that you can select multiple formatters so that you can also see other output:
 ```bash
 rspec --format RSpec::Github::Formatter --format progress
