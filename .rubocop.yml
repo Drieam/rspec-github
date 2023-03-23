@@ -1,5 +1,5 @@
 AllCops:
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 3.0
   NewCops: enable
 
 # A top class comment is not needed for this simple gem
@@ -14,3 +14,7 @@ Metrics/BlockLength:
   Exclude:
     - 'spec/**/*.rb' # Specs just have large blocks
     - '*.gemspec'    # Is just one block
+
+# We don't support MFA publishing
+Gemspec/RequireMFA:
+  Enabled: false
