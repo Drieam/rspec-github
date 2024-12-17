@@ -62,7 +62,7 @@ rspec --format RSpec::Github::Formatter --tag ~skip
 After checking out the repo, run `bundle install` to install dependencies. Then, run `rake spec` to run the tests.
 Publishing a new version is handled by the [publish workflow](.github/workflows/publish.yml). This workflow publishes a GitHub release to [rubygems](https://rubygems.org/) with the version defined in the release.
 
-### Usefull references
+### Useful references
 - https://help.github.com/en/actions/reference/development-tools-for-github-actions
 - https://developer.github.com/apps/quickstart-guides/creating-ci-tests-with-the-checks-api
 
