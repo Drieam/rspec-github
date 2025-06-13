@@ -5,7 +5,7 @@ on:
       - 'dependabot/**'
   pull_request:
 jobs:
-  reviewdog:
+  rubocop:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -15,11 +15,7 @@ jobs:
           ruby-version: '3.3'
           bundler-cache: true
       - name: rubocop
-        uses: reviewdog/action-rubocop@v2
-        with:
-          rubocop_version: gemfile
-          github_token: ${{ secrets.github_token }}
-          reporter: github-check
+        run: bundle exec rubocop
   rspec:
     runs-on: ubuntu-latest
     strategy:
