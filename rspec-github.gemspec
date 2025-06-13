@@ -21,5 +21,5 @@ Gem::Specification.new do |spec|
   # Specify which files should be added to the gem when it is released.
   spec.files = Dir['{lib}/**/*']
 
-  spec.add_runtime_dependency 'rspec-core', '~> 3.0'
+  spec.add_dependency 'rspec-core', '~> 3.0'
 end
