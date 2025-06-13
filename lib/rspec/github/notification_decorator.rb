@@ -15,7 +15,7 @@ module RSpec
       end
 
       def line
-        example.location.split(':')[1]
+        location[1]
       end
 
       def annotation
@@ -25,7 +25,7 @@ module RSpec
 
       def path
         # TODO: use `delete_prefix` when dropping ruby 2.4 support
-        File.realpath(raw_path).sub(/\A#{workspace}#{File::SEPARATOR}/, '')
+        File.realpath(location[0]).sub(/\A#{workspace}#{File::SEPARATOR}/, '')
       end
 
       private
@@ -42,8 +42,12 @@ module RSpec
         end
       end
 
-      def raw_path
-        example.location.split(':')[0]
+      def location
+        if @notification.respond_to?(:exception)
+          @notification.exception.backtrace.first.split(':')
+        else
+          example.location.split(':')
+        end
       end
 
       def workspace
