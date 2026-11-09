@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v6.1.0
+        uses: actions/checkout@v7.0.1
       - uses: ruby/setup-ruby@v1.336.0
         with:
           ruby-version: '3.3'
@@ -28,7 +28,7 @@ jobs:
     name: RSpec tests ruby ${{ matrix.ruby }}
     steps:
       - name: Check out code
-        uses: actions/checkout@v6.1.0
+        uses: actions/checkout@v7.0.1
       - uses: ruby/setup-ruby@v1.336.0
         with:
           ruby-version: ${{ matrix.ruby }}
@@ -39,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v6.1.0
+        uses: actions/checkout@v7.0.1
       - uses: ruby/setup-ruby@v1.336.0
         with:
           ruby-version: '3.3'
