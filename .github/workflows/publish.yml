@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v6.1.0
+        uses: actions/checkout@v7.0.1
       - uses: ruby/setup-ruby@v1.336.0
         with:
           ruby-version: '3.3'
