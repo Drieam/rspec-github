@@ -9,7 +9,7 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v6.1.0
-      - uses: ruby/setup-ruby@v1.336.0
+      - uses: ruby/setup-ruby@v1.338.0
         with:
           ruby-version: '3.3'
       - name: Replace version by tag value
