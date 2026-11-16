@@ -24,7 +24,12 @@ jobs:
           - '3.3'
           - '3.4'
           - '4.0'
-    name: RSpec tests ruby ${{ matrix.ruby }}
+        rspec:
+          - '3'
+          - '4'
+    env:
+      BUNDLE_GEMFILE: ${{ github.workspace }}/gemfiles/rspec${{ matrix.rspec }}.gemfile
+    name: RSpec ${{ matrix.rspec }} tests ruby ${{ matrix.ruby }}
     steps:
       - name: Check out code
         uses: actions/checkout@v7.0.1
@@ -36,6 +41,14 @@ jobs:
         run: bundle exec rspec spec/rspec
   e2e:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rspec:
+          - '3'
+          - '4'
+    env:
+      BUNDLE_GEMFILE: ${{ github.workspace }}/gemfiles/rspec${{ matrix.rspec }}.gemfile
+    name: e2e RSpec ${{ matrix.rspec }}
     steps:
       - name: Check out code
         uses: actions/checkout@v7.0.1
