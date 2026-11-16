@@ -1,18 +1,44 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
-# https://help.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
-
 version: 2
-updates:
-  - package-ecosystem: bundler
-    directory: '/'
-    schedule:
-      interval: weekly
-    open-pull-requests-limit: 99
 
-  - package-ecosystem: github-actions
-    directory: '/'
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
     schedule:
-      interval: weekly
-    open-pull-requests-limit: 99
+      day: "monday"
+      interval: "weekly"
+      time: "07:00"
+      timezone: "Europe/Amsterdam"
+
+  - package-ecosystem: "bundler"
+    allow:
+      - dependency-type: "all"
+    directory: "/"
+    groups:
+      rspec:
+        applies-to: version-updates
+        patterns:
+          - "rspec*"
+      rubocop:
+        applies-to: version-updates
+        patterns:
+          - "rubocop*"
+      ruby:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+      ruby-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+    schedule:
+      day: "monday"
+      interval: "weekly"
+      time: "07:00"
+      timezone: "Europe/Amsterdam"
+    versioning-strategy: "increase-if-necessary"
