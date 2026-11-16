@@ -53,6 +53,8 @@ rspec --format RSpec::Github::Formatter --format progress
 rspec --format RSpec::Github::Formatter --format documentation
 ```
 
+When running in GitHub Actions, each annotation ends with a link to the spec file at the failing line in the tested commit (for pull requests, the head commit of the pull request). The annotation's own link goes to the commit view, which only shows files changed in that commit.
+
 If you want to disable annotations for pending specs you can do that by adding `--tag ~skip` to your command:
 ```bash
 rspec --format RSpec::Github::Formatter --tag ~skip

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'json'
+require 'tempfile'
 require 'tmpdir'
 
 RSpec.describe RSpec::Github::Formatter do
@@ -28,6 +30,18 @@ RSpec.describe RSpec::Github::Formatter do
       location: location,
       skip: skip
     )
+  end
+
+  let(:github_env) { {} }
+
+  around do |example|
+    keys = %w[GITHUB_SERVER_URL GITHUB_REPOSITORY GITHUB_SHA GITHUB_EVENT_PATH]
+    saved = keys.to_h { |key| [key, ENV.fetch(key, nil)] }
+    keys.each { |key| ENV.delete(key) }
+    github_env.each { |key, value| ENV[key] = value }
+    example.run
+  ensure
+    saved.each { |key, value| ENV[key] = value }
   end
 
   before do
@@ -59,6 +73,55 @@ RSpec.describe RSpec::Github::Formatter do
 
         ::error file=spec/models/user_spec.rb,line=12::#{example.full_description}%0A%0A#{notification.message_lines.join('%0A')}
       MESSAGE
+    end
+
+    context 'when running in GitHub Actions' do
+      let(:github_env) do
+        {
+          'GITHUB_SERVER_URL' => 'https://github.com',
+          'GITHUB_REPOSITORY' => 'octo/repo',
+          'GITHUB_SHA' => 'abc123'
+        }
+      end
+
+      it 'appends a link to the spec file at the failing line' do
+        is_expected.to eq <<~MESSAGE
+
+          ::error file=spec/models/user_spec.rb,line=12::#{example.full_description}%0A%0A#{notification.message_lines.join('%0A')}%0A%0Ahttps://github.com/octo/repo/blob/abc123/spec/models/user_spec.rb#L12
+        MESSAGE
+      end
+
+      context 'on a pull_request event' do
+        let(:event_file) do
+          Tempfile.new(['event', '.json']).tap do |file|
+            file.write({ pull_request: { head: { sha: 'def456' } } }.to_json)
+            file.flush
+          end
+        end
+        let(:github_env) { super().merge('GITHUB_EVENT_PATH' => event_file.path) }
+
+        after { event_file.close! }
+
+        it 'links to the pull request head commit instead of the merge commit' do
+          is_expected.to include 'https://github.com/octo/repo/blob/def456/spec/models/user_spec.rb#L12'
+        end
+      end
+
+      context 'with an event file without a pull request' do
+        let(:event_file) do
+          Tempfile.new(['event', '.json']).tap do |file|
+            file.write({ ref: 'refs/heads/master' }.to_json)
+            file.flush
+          end
+        end
+        let(:github_env) { super().merge('GITHUB_EVENT_PATH' => event_file.path) }
+
+        after { event_file.close! }
+
+        it 'links to GITHUB_SHA' do
+          is_expected.to include 'https://github.com/octo/repo/blob/abc123/spec/models/user_spec.rb#L12'
+        end
+      end
     end
 
     context 'relative_path to GITHUB_WORKSPACE' do
