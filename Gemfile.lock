@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     rspec-github (1.0.0.develop)
-      rspec-core (~> 3.0)
+      rspec-core (>= 3.0, < 5)
 
 GEM
   remote: https://rubygems.org/
