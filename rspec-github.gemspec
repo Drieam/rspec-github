@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.description   = 'Formatter for RSpec to show errors in GitHub action annotations'
   spec.homepage      = 'https://drieam.github.io/rspec-github'
   spec.license       = 'MIT'
-  spec.required_ruby_version = Gem::Requirement.new('>= 3.1')
+  spec.required_ruby_version = Gem::Requirement.new('>= 3.2.0')
 
   spec.metadata['allowed_push_host'] = 'https://rubygems.org'
   spec.metadata['homepage_uri'] = spec.homepage
@@ -21,5 +21,5 @@ Gem::Specification.new do |spec|
   # Specify which files should be added to the gem when it is released.
   spec.files = Dir['{lib}/**/*']
 
-  spec.add_dependency 'rspec-core', '~> 3.0'
+  spec.add_dependency 'rspec-core', '>= 3.0', '< 5'
 end
