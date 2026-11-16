@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'json'
-require 'tempfile'
 require 'tmpdir'
 
 RSpec.describe RSpec::Github::Formatter do
@@ -35,7 +33,7 @@ RSpec.describe RSpec::Github::Formatter do
   let(:github_env) { {} }
 
   around do |example|
-    keys = %w[GITHUB_SERVER_URL GITHUB_REPOSITORY GITHUB_SHA GITHUB_EVENT_PATH]
+    keys = %w[GITHUB_SERVER_URL GITHUB_REPOSITORY GITHUB_SHA]
     saved = keys.to_h { |key| [key, ENV.fetch(key, nil)] }
     keys.each { |key| ENV.delete(key) }
     github_env.each { |key, value| ENV[key] = value }
@@ -46,8 +44,9 @@ RSpec.describe RSpec::Github::Formatter do
 
   before do
     allow(File).to receive(:realpath).and_call_original
-    allow(File).to receive(:realpath).with('./spec/models/user_spec.rb')
-                                     .and_return(File.join(Dir.pwd, 'spec/models/user_spec.rb'))
+    raw_path = location.split(':').first
+    allow(File).to receive(:realpath).with(raw_path)
+                                     .and_return(File.expand_path(raw_path, Dir.pwd))
   end
 
   describe '#example_failed' do
@@ -91,35 +90,12 @@ RSpec.describe RSpec::Github::Formatter do
         MESSAGE
       end
 
-      context 'on a pull_request event' do
-        let(:event_file) do
-          Tempfile.new(['event', '.json']).tap do |file|
-            file.write({ pull_request: { head: { sha: 'def456' } } }.to_json)
-            file.flush
-          end
-        end
-        let(:github_env) { super().merge('GITHUB_EVENT_PATH' => event_file.path) }
+      context 'when the path contains characters that are not URL safe' do
+        let(:location) { './spec/models/user#admin spec.rb:12' }
 
-        after { event_file.close! }
-
-        it 'links to the pull request head commit instead of the merge commit' do
-          is_expected.to include 'https://github.com/octo/repo/blob/def456/spec/models/user_spec.rb#L12'
-        end
-      end
-
-      context 'with an event file without a pull request' do
-        let(:event_file) do
-          Tempfile.new(['event', '.json']).tap do |file|
-            file.write({ ref: 'refs/heads/master' }.to_json)
-            file.flush
-          end
-        end
-        let(:github_env) { super().merge('GITHUB_EVENT_PATH' => event_file.path) }
-
-        after { event_file.close! }
-
-        it 'links to GITHUB_SHA' do
-          is_expected.to include 'https://github.com/octo/repo/blob/abc123/spec/models/user_spec.rb#L12'
+        it 'percent-encodes the path in the link' do
+          # `%` is escaped once more as `%25` by the workflow command; GitHub unescapes it to `%23` / `%20`.
+          is_expected.to include 'https://github.com/octo/repo/blob/abc123/spec/models/user%2523admin%2520spec.rb#L12'
         end
       end
     end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'json'
+require 'erb'
 
 module RSpec
   module Github
@@ -25,15 +25,16 @@ module RSpec
                                                      .gsub(Regexp.union(ESCAPE_MAP.keys), ESCAPE_MAP)
       end
 
-      # Link to the spec file at the failing line in the tested revision. The annotation itself
-      # links to the commit view, which does not show files that were not changed in that commit.
+      # Link to the spec file at the failing line in the tested commit (GITHUB_SHA, which is the merge
+      # commit on pull_request events). The annotation itself links to the commit view, which does not
+      # show files that were not changed in that commit.
       def file_url
         server_url = ENV.fetch('GITHUB_SERVER_URL', nil)
         repository = ENV.fetch('GITHUB_REPOSITORY', nil)
-        sha = commit_sha
+        sha = ENV.fetch('GITHUB_SHA', nil)
         return if [server_url, repository, sha].any? { |value| value.nil? || value.empty? }
 
-        "#{server_url}/#{repository}/blob/#{sha}/#{path}#L#{line}"
+        "#{server_url}/#{repository}/blob/#{sha}/#{url_path}#L#{line}"
       end
 
       def path
@@ -59,18 +60,9 @@ module RSpec
         example.location.split(':')[0]
       end
 
-      # On pull_request events GITHUB_SHA is a temporary merge commit, so prefer the PR head commit.
-      def commit_sha
-        pull_request_head_sha || ENV.fetch('GITHUB_SHA', nil)
-      end
-
-      def pull_request_head_sha
-        event_path = ENV.fetch('GITHUB_EVENT_PATH', nil)
-        return unless event_path && File.file?(event_path)
-
-        JSON.parse(File.read(event_path)).dig('pull_request', 'head', 'sha')
-      rescue JSON::ParserError
-        nil
+      # Percent-encode each path segment so characters like `#` or spaces don't break the URL.
+      def url_path
+        path.split('/').map { |segment| ERB::Util.url_encode(segment) }.join('/')
       end
 
       def workspace
