@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v7.0.1
-      - uses: ruby/setup-ruby@v1.338.0
+      - uses: ruby/setup-ruby@v1.342.0
         with:
           ruby-version: '3.3'
           bundler-cache: true
@@ -33,7 +33,7 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v7.0.1
-      - uses: ruby/setup-ruby@v1.338.0
+      - uses: ruby/setup-ruby@v1.342.0
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
@@ -52,7 +52,7 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v7.0.1
-      - uses: ruby/setup-ruby@v1.338.0
+      - uses: ruby/setup-ruby@v1.342.0
         with:
           ruby-version: '3.3'
           bundler-cache: true
